@@ -1,5 +1,12 @@
 package com.eficksan.mq4m1.commands;
 
+import android.net.Uri;
+import android.support.annotation.IntDef;
+import android.support.annotation.StringDef;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
 /**
  * Created by Aleksei Ivshin
  * on 13.10.2016.
@@ -7,10 +14,71 @@ package com.eficksan.mq4m1.commands;
 
 public class CommandFactory {
 
-    public Command create(String commandCode) {
-        switch (commandCode) {
+    public static final String TAKE_PHOTO = "cmd:take_photo/";
+    public static final String TAKE_PHOTO_CUSTOM = "cmd:take_photo_custom/";
+    public static final String TAKE_VIDEO = "cmd:take_video/";
+    public static final String TAKE_VIDEO_CUSTOM = "cmd:take_video_custom/";
+    public static final String OPEN_BROWSER = "cmd:open_browser/";
+    public static final String RECORD_AUDIO = "cmd:record_audio/";
+
+    public static final int TAKE_PHOTO_REQUEST_CODE = 0;
+    public static final int TAKE_PHOTO_CUSTOM_REQUEST_CODE = 1;
+    public static final int TAKE_VIDEO_REQUEST_CODE = 2;
+    public static final int TAKE_VIDEO_CUSTOM_REQUEST_CODE = 3;
+    public static final int OPEN_BROWSER_REQUEST_CODE = 4;
+    public static final int RECORD_AUDIO_REQUEST_CODE = 5;
+
+    @Retention(RetentionPolicy.SOURCE)
+    @StringDef({
+            TAKE_PHOTO,
+            TAKE_PHOTO_CUSTOM,
+            TAKE_VIDEO,
+            TAKE_VIDEO_CUSTOM,
+            OPEN_BROWSER,
+            RECORD_AUDIO})
+    public @interface CommandType {
+    }
+
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({
+            TAKE_PHOTO_REQUEST_CODE,
+            TAKE_PHOTO_CUSTOM_REQUEST_CODE,
+            TAKE_VIDEO_REQUEST_CODE,
+            TAKE_VIDEO_CUSTOM_REQUEST_CODE,
+            OPEN_BROWSER_REQUEST_CODE,
+            RECORD_AUDIO_REQUEST_CODE})
+    public @interface CommandRequestCode {
+    }
+
+    public static Command create(String commandContent) {
+        switch (commandContent) {
+            case TAKE_PHOTO:
+            case TAKE_PHOTO_CUSTOM:
+            case TAKE_VIDEO:
+            case TAKE_VIDEO_CUSTOM:
+            case RECORD_AUDIO:
             default:
-                throw new IllegalArgumentException("No command for " + commandCode);
+                if(isOpenBrowserCommand(commandContent)) {
+                    return new OpenBrowserCommand(commandContent);
+                }
+                throw new IllegalArgumentException("No command for " + commandContent);
         }
+    }
+
+    public static CommandResultHandler createResultHandler(int requestCode) {
+        switch (requestCode) {
+            case TAKE_PHOTO_REQUEST_CODE:
+            case TAKE_PHOTO_CUSTOM_REQUEST_CODE:
+            case TAKE_VIDEO_REQUEST_CODE:
+            case TAKE_VIDEO_CUSTOM_REQUEST_CODE:
+            case RECORD_AUDIO_REQUEST_CODE:
+            case OPEN_BROWSER_REQUEST_CODE:
+            default:
+                return null;
+        }
+    }
+
+    private static boolean isOpenBrowserCommand(String command) {
+        return command.indexOf(OPEN_BROWSER) == 0;
     }
 }

@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.eficksan.mq4m1.commands.Command;
 import com.eficksan.mq4m1.commands.CommandFactory;
+import com.eficksan.mq4m1.commands.CommandResultHandler;
 import com.eficksan.mq4m1.data.CommandEntity;
 import com.eficksan.mq4m1.data.CommandRepository;
 import com.eficksan.mq4m1.view.CommandListAdapter;
@@ -67,18 +68,30 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (!handleCommandReceiveResult(requestCode, resultCode, data)) {
+            CommandResultHandler resultHandler = CommandFactory.createResultHandler(requestCode);
+            if (resultHandler != null) {
+                resultHandler.handleResult(this, requestCode, resultCode, data);
+            }
+        }
+
+    }
+
+    private boolean handleCommandReceiveResult(int requestCode, int resultCode, Intent data) {
         IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (scanResult != null) {
             final String scanContent = scanResult.getContents();
             Log.v(TAG, String.format("Command code: '%s'", scanContent));
             saveCommand(scanContent);
             runCommand(scanContent);
+            return true;
         }
+        return false;
     }
 
     private void runCommand(String scanContent) {
-        Command command = new CommandFactory().create(scanContent);
-        command.execute();
+        Command command = CommandFactory.create(scanContent);
+        command.execute(this);
     }
 
     private void saveCommand(final String scanContent) {
@@ -111,4 +124,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
 }
