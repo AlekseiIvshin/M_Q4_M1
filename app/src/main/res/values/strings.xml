@@ -2,4 +2,5 @@
     <string name="app_name">MQ4M1</string>
     <string name="next_command">Next command</string>
     <string name="command_saved">Command saved: %s</string>
+    <string name="audio_recording_result">Audio was recorded and saved in %s</string>
 </resources>

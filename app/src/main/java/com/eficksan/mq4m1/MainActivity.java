@@ -10,7 +10,6 @@ import android.widget.Toast;
 
 import com.eficksan.mq4m1.commands.Command;
 import com.eficksan.mq4m1.commands.CommandFactory;
-import com.eficksan.mq4m1.commands.CommandResultHandler;
 import com.eficksan.mq4m1.data.CommandEntity;
 import com.eficksan.mq4m1.data.CommandRepository;
 import com.eficksan.mq4m1.view.CommandListAdapter;
@@ -69,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (!handleCommandReceiveResult(requestCode, resultCode, data)) {
-            CommandResultHandler resultHandler = CommandFactory.createResultHandler(requestCode);
+            Command resultHandler = CommandFactory.createResultHandler(requestCode);
             if (resultHandler != null) {
                 resultHandler.handleResult(this, requestCode, resultCode, data);
             }

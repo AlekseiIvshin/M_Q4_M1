@@ -1,8 +1,10 @@
 package com.eficksan.mq4m1.commands;
 
-import android.net.Uri;
 import android.support.annotation.IntDef;
 import android.support.annotation.StringDef;
+
+import com.eficksan.mq4m1.audio.AudoRecordingCommand;
+import com.eficksan.mq4m1.browser.OpenBrowserCommand;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -57,6 +59,7 @@ public class CommandFactory {
             case TAKE_VIDEO:
             case TAKE_VIDEO_CUSTOM:
             case RECORD_AUDIO:
+                return new AudoRecordingCommand();
             default:
                 if(isOpenBrowserCommand(commandContent)) {
                     return new OpenBrowserCommand(commandContent);
@@ -65,13 +68,14 @@ public class CommandFactory {
         }
     }
 
-    public static CommandResultHandler createResultHandler(int requestCode) {
+    public static Command createResultHandler(int requestCode) {
         switch (requestCode) {
             case TAKE_PHOTO_REQUEST_CODE:
             case TAKE_PHOTO_CUSTOM_REQUEST_CODE:
             case TAKE_VIDEO_REQUEST_CODE:
             case TAKE_VIDEO_CUSTOM_REQUEST_CODE:
             case RECORD_AUDIO_REQUEST_CODE:
+                return new AudoRecordingCommand();
             case OPEN_BROWSER_REQUEST_CODE:
             default:
                 return null;
