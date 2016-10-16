@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_video_recording"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.eficksan.mq4m1.video.VideoRecordingActivity">
+
+    <TextureView
+        android:id="@+id/svVideoPreview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <ImageButton
+        android:id="@+id/record_video"
+        android:layout_width="@dimen/record_video_button_size"
+        android:layout_height="@dimen/record_video_button_size"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:background="@drawable/bg_start_recording"
+        android:visibility="gone"
+        tools:visibility="visible" />
+</RelativeLayout>

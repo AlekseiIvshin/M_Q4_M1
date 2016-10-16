@@ -15,7 +15,7 @@
         android:id="@+id/record_audio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/mic_start_record_background"
+        android:background="@drawable/bg_start_recording"
         android:paddingBottom="@dimen/recording_padding"
         android:paddingLeft="@dimen/recording_padding"
         android:paddingRight="@dimen/recording_padding"

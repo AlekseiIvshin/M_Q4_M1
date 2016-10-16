@@ -38,13 +38,13 @@ dependencies {
     compile group: 'com.google.zxing', name: 'android-core', version: '3.3.0'
     compile group: 'com.google.zxing', name: 'android-integration', version: '3.3.0'
 
+
+
     compile 'com.jakewharton:butterknife:8.4.0'
-    apt 'com.jakewharton:butterknife-compiler:8.4.0'
-
     compile 'nl.2312:rxcupboard:0.7'
-
     compile 'joda-time:joda-time:2.9.4'
-
     compile 'com.android.support:appcompat-v7:24.2.1'
+    compile 'com.android.support:support-v4:24.2.1'
     testCompile 'junit:junit:4.12'
+    apt 'com.jakewharton:butterknife-compiler:8.4.0'
 }

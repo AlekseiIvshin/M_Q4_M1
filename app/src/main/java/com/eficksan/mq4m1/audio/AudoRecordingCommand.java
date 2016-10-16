@@ -18,7 +18,7 @@ public class AudoRecordingCommand extends Command {
     @Override
     public void execute(Activity activityContext) {
         activityContext.startActivityForResult(
-                AudioRecordingActivity.buildLauncher(activityContext), getCommandRequestCode());
+                AudioRecordingActivity.buildLauncherIntent(activityContext), getCommandRequestCode());
     }
 
     @Override

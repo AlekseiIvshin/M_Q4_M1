@@ -30,7 +30,7 @@ public class AudioRecordingActivity extends AppCompatActivity {
     private MediaRecorder mRecorder;
     private String mOutputFilePath;
 
-    public static Intent buildLauncher(Context context) {
+    public static Intent buildLauncherIntent(Context context) {
         return new Intent(context, AudioRecordingActivity.class);
     }
 
@@ -65,7 +65,7 @@ public class AudioRecordingActivity extends AppCompatActivity {
 
     private void startRecord() {
         mIsRecordingNow = true;
-        mRecordAudio.setBackground(ContextCompat.getDrawable(this, R.drawable.mic_recording_background));
+        mRecordAudio.setBackground(ContextCompat.getDrawable(this, R.drawable.bg_recording));
 
         mOutputFilePath = outputFilePath();
 

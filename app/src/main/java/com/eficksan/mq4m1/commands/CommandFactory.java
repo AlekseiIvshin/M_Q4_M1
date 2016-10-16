@@ -5,6 +5,8 @@ import android.support.annotation.StringDef;
 
 import com.eficksan.mq4m1.audio.AudoRecordingCommand;
 import com.eficksan.mq4m1.browser.OpenBrowserCommand;
+import com.eficksan.mq4m1.video.VideoCapturingCommand;
+import com.eficksan.mq4m1.video.VideoCustomCapturingCommand;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -57,11 +59,13 @@ public class CommandFactory {
             case TAKE_PHOTO:
             case TAKE_PHOTO_CUSTOM:
             case TAKE_VIDEO:
+                return new VideoCapturingCommand();
             case TAKE_VIDEO_CUSTOM:
+                return new VideoCustomCapturingCommand();
             case RECORD_AUDIO:
                 return new AudoRecordingCommand();
             default:
-                if(isOpenBrowserCommand(commandContent)) {
+                if (isOpenBrowserCommand(commandContent)) {
                     return new OpenBrowserCommand(commandContent);
                 }
                 throw new IllegalArgumentException("No command for " + commandContent);
@@ -73,7 +77,9 @@ public class CommandFactory {
             case TAKE_PHOTO_REQUEST_CODE:
             case TAKE_PHOTO_CUSTOM_REQUEST_CODE:
             case TAKE_VIDEO_REQUEST_CODE:
+                return new VideoCapturingCommand();
             case TAKE_VIDEO_CUSTOM_REQUEST_CODE:
+                return new VideoCustomCapturingCommand();
             case RECORD_AUDIO_REQUEST_CODE:
                 return new AudoRecordingCommand();
             case OPEN_BROWSER_REQUEST_CODE:
