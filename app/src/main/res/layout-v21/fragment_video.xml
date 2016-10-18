@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context="com.eficksan.mq4m1.video.VideoRecordingActivity">
 
-    <SurfaceView
+    <com.eficksan.mq4m1.video.v21.AutoFitTextureView
         android:id="@+id/svVideoPreview"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

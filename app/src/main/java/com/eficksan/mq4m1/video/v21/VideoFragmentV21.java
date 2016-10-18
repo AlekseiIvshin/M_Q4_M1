@@ -20,12 +20,10 @@ import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.MediaRecorder;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.util.Size;
@@ -37,7 +35,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.eficksan.mq4m1.R;
-import com.eficksan.mq4m1.video.VideoRecordingResultListener;
+import com.eficksan.mq4m1.video.BaseVideoFragment;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -52,8 +50,8 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-public class VideoFragment extends Fragment {
-    private static final String TAG = VideoFragment.class.getSimpleName();
+public class VideoFragmentV21 extends BaseVideoFragment {
+    private static final String TAG = VideoFragmentV21.class.getSimpleName();
 
     private static final int SENSOR_ORIENTATION_DEFAULT_DEGREES = 90;
     private static final int SENSOR_ORIENTATION_INVERSE_DEGREES = 270;
@@ -75,7 +73,6 @@ public class VideoFragment extends Fragment {
         INVERSE_ORIENTATIONS.append(Surface.ROTATION_270, 0);
     }
 
-    private static final String EXTRA_RESULT_DIRECTORY = "EXTRA_RESULT_DIRECTORY";
     private static final String[] VIDEO_PERMISSIONS = {
             Manifest.permission.CAMERA,
             Manifest.permission.RECORD_AUDIO,
@@ -88,11 +85,6 @@ public class VideoFragment extends Fragment {
     @BindView(R.id.svVideoPreview)
     AutoFitTextureView mVideoPreview;
 
-    private Unbinder mUnbinder;
-
-    private boolean mIsRecording = false;
-    private String mVideoOutput;
-
     private Semaphore mCameraOpenCloseLock = new Semaphore(1);
 
     private HandlerThread mBackgroundThread;
@@ -103,9 +95,8 @@ public class VideoFragment extends Fragment {
     private Size mVideoSize;
     private Size mPreviewSize;
 
-    private MediaRecorder mMediaRecorder;
-
     private CameraDevice mCameraDevice;
+    private Unbinder mUnbinder;
 
     /**
      * {@link CameraDevice.StateCallback} is called when {@link CameraDevice} changes its status.
@@ -173,17 +164,15 @@ public class VideoFragment extends Fragment {
         }
 
     };
-    private Surface mRecorderSurface;
-    private VideoRecordingResultListener mVideoRecordListener;
 
-    public VideoFragment() {
+    public VideoFragmentV21() {
         // Required empty public constructor
     }
 
-    public static VideoFragment newInstance(String outputDirectory) {
+    public static VideoFragmentV21 newInstance(String outputDirectory) {
         Bundle args = new Bundle();
         args.putString(EXTRA_RESULT_DIRECTORY, outputDirectory);
-        VideoFragment fragment = new VideoFragment();
+        VideoFragmentV21 fragment = new VideoFragmentV21();
         fragment.setArguments(args);
         return fragment;
     }
@@ -219,11 +208,6 @@ public class VideoFragment extends Fragment {
         }
     }
 
-    private String getDefaultResultPath() {
-        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).getAbsolutePath();
-    }
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -236,14 +220,6 @@ public class VideoFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         mUnbinder = ButterKnife.bind(this, view);
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof VideoRecordingResultListener) {
-            mVideoRecordListener = (VideoRecordingResultListener) context;
-        }
     }
 
     @Override
@@ -269,12 +245,6 @@ public class VideoFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         mUnbinder.unbind();
-    }
-
-    @Override
-    public void onDetach() {
-        mVideoRecordListener = null;
-        super.onDetach();
     }
 
     @OnClick(R.id.record_video)
@@ -366,6 +336,7 @@ public class VideoFragment extends Fragment {
         try {
             closePreviewSession();
             setUpMediaRecorder();
+            mMediaRecorder.prepare();
             SurfaceTexture texture = mVideoPreview.getSurfaceTexture();
             assert texture != null;
             texture.setDefaultBufferSize(mPreviewSize.getWidth(), mPreviewSize.getHeight());
@@ -378,9 +349,9 @@ public class VideoFragment extends Fragment {
             mPreviewBuilder.addTarget(previewSurface);
 
             // Set up Surface for the MediaRecorder
-            mRecorderSurface = mMediaRecorder.getSurface();
-            surfaces.add(mRecorderSurface);
-            mPreviewBuilder.addTarget(mRecorderSurface);
+            Surface surface = mMediaRecorder.getSurface();
+            surfaces.add(surface);
+            mPreviewBuilder.addTarget(surface);
 
             // Start a capture session
             // Once the session starts, we can update the UI and start recording
@@ -394,8 +365,7 @@ public class VideoFragment extends Fragment {
                         @Override
                         public void run() {
                             // UI
-                            mRecordVideo.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.bg_recording));
-                            mIsRecording = true;
+                            onRecordingStarted(mRecordVideo);
 
                             // Start recording
                             mMediaRecorder.start();
@@ -420,36 +390,23 @@ public class VideoFragment extends Fragment {
 
     private void stopRecording() {
         // UI
-        mIsRecording = false;
-        mRecordVideo.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.bg_start_recording));
+        onRecordingFinished(mRecordVideo);
         // Stop recording
-        mMediaRecorder.stop();
-        mMediaRecorder.reset();
+        releaseMediaRouter();
 
-            Log.d(TAG, "Video saved: " + mVideoOutput);
-            if (mVideoRecordListener != null) {
-                mVideoRecordListener.onVideoRecorded(mVideoOutput);
-            }
-        mVideoOutput = null;
+        deliverResult();
 
         startPreview();
     }
 
-    private void setUpMediaRecorder() throws IOException {
+    @Override
+    protected void setUpMediaRecorder() {
         final Activity activity = getActivity();
         if (null == activity) {
             return;
         }
-        mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
-        mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-        generateVideoPath();
-        mMediaRecorder.setOutputFile(mVideoOutput);
-        mMediaRecorder.setVideoEncodingBitRate(10000000);
-        mMediaRecorder.setVideoFrameRate(30);
+        super.setUpMediaRecorder();
         mMediaRecorder.setVideoSize(mVideoSize.getWidth(), mVideoSize.getHeight());
-        mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
-        mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
         int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
         switch (mSensorOrientation) {
             case SENSOR_ORIENTATION_DEFAULT_DEGREES:
@@ -458,20 +415,6 @@ public class VideoFragment extends Fragment {
             case SENSOR_ORIENTATION_INVERSE_DEGREES:
                 mMediaRecorder.setOrientationHint(INVERSE_ORIENTATIONS.get(rotation));
                 break;
-        }
-        mMediaRecorder.prepare();
-    }
-
-    private void generateVideoPath() {
-        if (mVideoOutput == null || mVideoOutput.isEmpty()) {
-            Bundle args = getArguments();
-            String directory;
-            if (args != null) {
-                directory = args.getString(EXTRA_RESULT_DIRECTORY, getDefaultResultPath());
-            } else {
-                directory = getDefaultResultPath();
-            }
-            mVideoOutput = directory + "/" + System.currentTimeMillis() + ".mp4");
         }
     }
 

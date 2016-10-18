@@ -7,10 +7,10 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.eficksan.mq4m1.R;
-import com.eficksan.mq4m1.video.v21.VideoFragment;
+import com.eficksan.mq4m1.video.v16.VideoFragmentV16;
+import com.eficksan.mq4m1.video.v21.VideoFragmentV21;
 
 public class VideoRecordingActivity extends AppCompatActivity implements VideoRecordingResultListener {
 
@@ -45,9 +45,9 @@ public class VideoRecordingActivity extends AppCompatActivity implements VideoRe
     private Fragment getFragment() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Log.v(TAG, "Run fragment for sdk equal or greater than 21");
-            return VideoFragment.newInstance(null);
+            return VideoFragmentV21.newInstance(null);
         } else {
-            throw new IllegalArgumentException("No implementation for older versions");
+            return VideoFragmentV16.newInstance(null);
         }
     }
 
