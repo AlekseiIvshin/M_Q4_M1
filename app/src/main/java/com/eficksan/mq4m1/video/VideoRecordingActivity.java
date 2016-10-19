@@ -2,6 +2,7 @@ package com.eficksan.mq4m1.video;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -55,7 +56,7 @@ public class VideoRecordingActivity extends AppCompatActivity implements VideoRe
     public void onVideoRecorded(String videoUrl) {
         Log.v(TAG, "Video saved: " + videoUrl);
         Intent intent = new Intent();
-        intent.putExtra(EXTRA_VIDEO_URL, videoUrl);
+        intent.setData(Uri.parse(videoUrl));
         setResult(RESULT_OK, intent);
         finish();
     }

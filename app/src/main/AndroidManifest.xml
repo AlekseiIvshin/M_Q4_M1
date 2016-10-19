@@ -26,7 +26,11 @@
         <activity android:name=".audio.AudioRecordingActivity" />
         <activity
             android:name=".video.VideoRecordingActivity"
-            android:screenOrientation="landscape" />
+            android:screenOrientation="landscape">
+            <intent-filter>
+                <action android:name="android.media.action.VIDEO_CAPTURE"/>
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

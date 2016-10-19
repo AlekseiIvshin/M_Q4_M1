@@ -6,7 +6,6 @@ import android.support.annotation.StringDef;
 import com.eficksan.mq4m1.audio.AudoRecordingCommand;
 import com.eficksan.mq4m1.browser.OpenBrowserCommand;
 import com.eficksan.mq4m1.video.VideoCapturingCommand;
-import com.eficksan.mq4m1.video.VideoCustomCapturingCommand;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -21,14 +20,12 @@ public class CommandFactory {
     public static final String TAKE_PHOTO = "cmd:take_photo/";
     public static final String TAKE_PHOTO_CUSTOM = "cmd:take_photo_custom/";
     public static final String TAKE_VIDEO = "cmd:take_video/";
-    public static final String TAKE_VIDEO_CUSTOM = "cmd:take_video_custom/";
     public static final String OPEN_BROWSER = "cmd:open_browser/";
     public static final String RECORD_AUDIO = "cmd:record_audio/";
 
     public static final int TAKE_PHOTO_REQUEST_CODE = 0;
     public static final int TAKE_PHOTO_CUSTOM_REQUEST_CODE = 1;
     public static final int TAKE_VIDEO_REQUEST_CODE = 2;
-    public static final int TAKE_VIDEO_CUSTOM_REQUEST_CODE = 3;
     public static final int OPEN_BROWSER_REQUEST_CODE = 4;
     public static final int RECORD_AUDIO_REQUEST_CODE = 5;
 
@@ -37,7 +34,6 @@ public class CommandFactory {
             TAKE_PHOTO,
             TAKE_PHOTO_CUSTOM,
             TAKE_VIDEO,
-            TAKE_VIDEO_CUSTOM,
             OPEN_BROWSER,
             RECORD_AUDIO})
     public @interface CommandType {
@@ -48,7 +44,6 @@ public class CommandFactory {
             TAKE_PHOTO_REQUEST_CODE,
             TAKE_PHOTO_CUSTOM_REQUEST_CODE,
             TAKE_VIDEO_REQUEST_CODE,
-            TAKE_VIDEO_CUSTOM_REQUEST_CODE,
             OPEN_BROWSER_REQUEST_CODE,
             RECORD_AUDIO_REQUEST_CODE})
     public @interface CommandRequestCode {
@@ -60,8 +55,6 @@ public class CommandFactory {
             case TAKE_PHOTO_CUSTOM:
             case TAKE_VIDEO:
                 return new VideoCapturingCommand();
-            case TAKE_VIDEO_CUSTOM:
-                return new VideoCustomCapturingCommand();
             case RECORD_AUDIO:
                 return new AudoRecordingCommand();
             default:
@@ -78,8 +71,6 @@ public class CommandFactory {
             case TAKE_PHOTO_CUSTOM_REQUEST_CODE:
             case TAKE_VIDEO_REQUEST_CODE:
                 return new VideoCapturingCommand();
-            case TAKE_VIDEO_CUSTOM_REQUEST_CODE:
-                return new VideoCustomCapturingCommand();
             case RECORD_AUDIO_REQUEST_CODE:
                 return new AudoRecordingCommand();
             case OPEN_BROWSER_REQUEST_CODE:

@@ -20,8 +20,12 @@ public class VideoCapturingCommand extends Command {
     @Override
     public void execute(Activity activityContext) {
         Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-        if (takeVideoIntent.resolveActivity(activityContext.getPackageManager()) != null) {
-            activityContext.startActivityForResult(takeVideoIntent, getCommandRequestCode());
+
+        Intent chooser = Intent.createChooser(
+                takeVideoIntent,
+                activityContext.getString(R.string.choose_take_a_video));
+        if (chooser.resolveActivity(activityContext.getPackageManager()) != null) {
+            activityContext.startActivityForResult(chooser, getCommandRequestCode());
         }
     }
 
