@@ -25,7 +25,7 @@ public class VideoCapturingCommand extends Command {
                 takeVideoIntent,
                 activityContext.getString(R.string.choose_take_a_video));
         if (chooser.resolveActivity(activityContext.getPackageManager()) != null) {
-            activityContext.startActivityForResult(chooser, getCommandRequestCode());
+            activityContext.startActivityForResult(chooser, getDefaultCommandRequestCode());
         }
     }
 
@@ -42,7 +42,7 @@ public class VideoCapturingCommand extends Command {
     }
 
     @Override
-    protected int getCommandRequestCode() {
+    protected int getDefaultCommandRequestCode() {
         return CommandFactory.TAKE_VIDEO_REQUEST_CODE;
     }
 }

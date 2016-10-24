@@ -1,4 +1,4 @@
-package com.eficksan.mq4m1.video;
+package com.eficksan.mq4m1.photo;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -11,12 +11,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.eficksan.mq4m1.R;
-import com.eficksan.mq4m1.video.v16.VideoFragmentV16;
-import com.eficksan.mq4m1.video.v21.VideoFragmentV21;
+import com.eficksan.mq4m1.photo.v16.TakePhotoV16Fragment;
+import com.eficksan.mq4m1.photo.v21.TakePhotoV21Fragment;
 
-public class VideoRecordingActivity extends AppCompatActivity implements VideoRecordingResultListener {
+public class TakingPhotoActivity extends AppCompatActivity implements TakingPhotoResultListener {
 
-    private static final String TAG = VideoRecordingActivity.class.getSimpleName();
+    private static final String TAG = TakingPhotoActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,18 +33,18 @@ public class VideoRecordingActivity extends AppCompatActivity implements VideoRe
     }
 
     private Fragment getFragment() {
-        String output = generateVideoPath();
+        String output = generatePhotoPath();
+        Log.v(TAG, "Output: " + output);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Log.v(TAG, "Run fragment for sdk equal or greater than 21");
-            return VideoFragmentV21.newInstance(output);
+            return TakePhotoV16Fragment.newInstance(output);
         } else {
-            return VideoFragmentV16.newInstance(output);
+            return TakePhotoV21Fragment.newInstance(output);
         }
     }
 
     @Override
-    public void onVideoRecorded(String videoUrl) {
-        Log.v(TAG, "Video saved: " + videoUrl);
+    public void onSuccess(String videoUrl) {
+        Log.v(TAG, "Photo saved: " + videoUrl);
         Intent intent = new Intent();
         intent.setData(Uri.parse(videoUrl));
         setResult(RESULT_OK, intent);
@@ -52,13 +52,13 @@ public class VideoRecordingActivity extends AppCompatActivity implements VideoRe
     }
 
     @Override
-    public void onRecordingFailed(Throwable exception) {
+    public void onFail(Throwable exception) {
         Log.e(TAG, exception.getMessage(), exception);
         finishWithFail();
     }
 
     @Override
-    public void onRecordingFailed(String message) {
+    public void onFail(String message) {
         Log.e(TAG, message);
         finishWithFail();
     }
@@ -68,18 +68,18 @@ public class VideoRecordingActivity extends AppCompatActivity implements VideoRe
         finish();
     }
 
-    private String generateVideoPath() {
-            Intent args = getIntent();
-            String directory;
-                directory = args.getStringExtra(MediaStore.EXTRA_OUTPUT);
-            if (directory==null){
-                directory = getDefaultResultPath();
-            }
-            return directory + "/" + System.currentTimeMillis() + ".mp4";
+    private String generatePhotoPath() {
+        Intent args = getIntent();
+        String directory;
+        directory = args.getStringExtra(MediaStore.EXTRA_OUTPUT);
+        if (directory == null) {
+            directory = getDefaultResultPath();
+        }
+        return directory + "/" + System.currentTimeMillis() + ".mp4";
     }
 
     private String getDefaultResultPath() {
-        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).getAbsolutePath();
+        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath();
     }
 
 }

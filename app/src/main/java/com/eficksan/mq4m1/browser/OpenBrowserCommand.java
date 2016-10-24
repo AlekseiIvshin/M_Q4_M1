@@ -33,7 +33,7 @@ public class OpenBrowserCommand extends Command {
     }
 
     @Override
-    protected int getCommandRequestCode() {
+    protected int getDefaultCommandRequestCode() {
         return CommandFactory.OPEN_BROWSER_REQUEST_CODE;
     }
 

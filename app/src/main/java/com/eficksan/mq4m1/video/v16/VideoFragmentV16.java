@@ -3,8 +3,8 @@ package com.eficksan.mq4m1.video.v16;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -27,7 +27,7 @@ public class VideoFragmentV16 extends BaseVideoFragment implements SurfaceHolder
     @BindView(R.id.record_video)
     View mRecordVideo;
 
-    @BindView(R.id.svVideoPreview)
+    @BindView(R.id.sv_video_preview)
     SurfaceView mVideoPreview;
 
     private Unbinder mUnbinder;
@@ -39,7 +39,7 @@ public class VideoFragmentV16 extends BaseVideoFragment implements SurfaceHolder
 
     public static VideoFragmentV16 newInstance(String outputDirectory) {
         Bundle args = new Bundle();
-        args.putString(EXTRA_RESULT_DIRECTORY, outputDirectory);
+        args.putString(MediaStore.EXTRA_OUTPUT, outputDirectory);
         VideoFragmentV16 fragment = new VideoFragmentV16();
         fragment.setArguments(args);
         return fragment;

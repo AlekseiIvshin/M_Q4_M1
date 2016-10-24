@@ -18,7 +18,7 @@ public class AudoRecordingCommand extends Command {
     @Override
     public void execute(Activity activityContext) {
         activityContext.startActivityForResult(
-                AudioRecordingActivity.buildLauncherIntent(activityContext), getCommandRequestCode());
+                AudioRecordingActivity.buildLauncherIntent(activityContext), getDefaultCommandRequestCode());
     }
 
     @Override
@@ -31,7 +31,7 @@ public class AudoRecordingCommand extends Command {
     }
 
     @Override
-    protected int getCommandRequestCode() {
+    protected int getDefaultCommandRequestCode() {
         return CommandFactory.RECORD_AUDIO_REQUEST_CODE;
     }
 }

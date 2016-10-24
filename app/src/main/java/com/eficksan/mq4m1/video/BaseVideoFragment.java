@@ -4,6 +4,7 @@ import android.content.Context;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -18,8 +19,6 @@ import com.eficksan.mq4m1.R;
 
 public class BaseVideoFragment extends Fragment {
     private static final String TAG = BaseVideoFragment.class.getSimpleName();
-
-    protected static final String EXTRA_RESULT_DIRECTORY = "EXTRA_RESULT_DIRECTORY";
 
     protected String mVideoOutput;
     protected MediaRecorder mMediaRecorder;
@@ -47,7 +46,7 @@ public class BaseVideoFragment extends Fragment {
         mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
         mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
 
-        mVideoOutput = generateVideoPath();
+        mVideoOutput = getArguments().getString(MediaStore.EXTRA_OUTPUT);
 
         mMediaRecorder.setOutputFile(mVideoOutput);
         mMediaRecorder.setVideoEncodingBitRate(10000000);
@@ -82,21 +81,4 @@ public class BaseVideoFragment extends Fragment {
         recordView.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.bg_start_recording));
     }
 
-    private String generateVideoPath() {
-        if (mVideoOutput == null || mVideoOutput.isEmpty()) {
-            Bundle args = getArguments();
-            String directory;
-            if (args != null) {
-                directory = args.getString(EXTRA_RESULT_DIRECTORY, getDefaultResultPath());
-            } else {
-                directory = getDefaultResultPath();
-            }
-            return directory + "/" + System.currentTimeMillis() + ".mp4";
-        }
-        return mVideoOutput;
-    }
-
-    private String getDefaultResultPath() {
-        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).getAbsolutePath();
-    }
 }

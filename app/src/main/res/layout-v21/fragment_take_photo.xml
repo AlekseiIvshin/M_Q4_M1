@@ -6,13 +6,13 @@
     android:layout_height="match_parent"
     tools:context="com.eficksan.mq4m1.video.VideoRecordingActivity">
 
-    <SurfaceView
-        android:id="@+id/sv_video_preview"
+    <com.eficksan.mq4m1.video.v21.AutoFitTextureView
+        android:id="@+id/sv_preview"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
     <ImageButton
-        android:id="@+id/record_video"
+        android:id="@+id/take_photo"
         android:layout_width="@dimen/record_video_button_size"
         android:layout_height="@dimen/record_video_button_size"
         android:layout_alignParentBottom="true"

@@ -13,12 +13,16 @@ public abstract class Command {
     public abstract void execute(Activity activityContext);
 
     public void handleResult(Activity activityContext, int requestCode, int resultCode, Intent data) {
-        if (requestCode == getCommandRequestCode()) {
+        if (isCanHandleResult(requestCode)) {
             handleCommandResult(activityContext, requestCode, resultCode, data);
         }
     }
 
     protected abstract void handleCommandResult(Activity activityContext, int requestCode, int resultCode, Intent data);
 
-    protected abstract int getCommandRequestCode();
+    protected abstract int getDefaultCommandRequestCode();
+
+    protected boolean isCanHandleResult(int requestCode) {
+        return requestCode == getDefaultCommandRequestCode();
+    }
 }
