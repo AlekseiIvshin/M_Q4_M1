@@ -4,6 +4,7 @@
     <string name="command_saved">Command saved: %s</string>
     <string name="audio_recording_result">Audio was recorded and saved in %s</string>
     <string name="video_capturing_result">Video was captured: file path %s</string>
+    <string name="taking_photo_result">Photo was taken: file path %s</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

@@ -75,7 +75,7 @@ public class TakingPhotoActivity extends AppCompatActivity implements TakingPhot
         if (directory == null) {
             directory = getDefaultResultPath();
         }
-        return directory + "/" + System.currentTimeMillis() + ".mp4";
+        return directory + "/" + System.currentTimeMillis() + ".jpg";
     }
 
     private String getDefaultResultPath() {
