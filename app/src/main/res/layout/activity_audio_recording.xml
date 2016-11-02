@@ -10,12 +10,13 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.eficksan.mq4m1.audio.AudioRecordingActivity">
 
-    <ImageView
-        android:layout_centerInParent="true"
+    <ImageButton
         android:id="@+id/record_audio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:background="@drawable/bg_start_recording"
+        android:clickable="true"
         android:paddingBottom="@dimen/recording_padding"
         android:paddingLeft="@dimen/recording_padding"
         android:paddingRight="@dimen/recording_padding"

@@ -23,11 +23,13 @@ public class AudoRecordingCommand extends Command {
 
     @Override
     protected void handleCommandResult(Activity activityContext, int requestCode, int resultCode, Intent data) {
-        String resultFilePath = AudioRecordingActivity.takeResult(data);
-        Toast.makeText(activityContext,
-                activityContext.getString(R.string.audio_recording_result, resultFilePath),
-                Toast.LENGTH_SHORT)
-                .show();
+        if (data != null) {
+            String resultFilePath = AudioRecordingActivity.takeResult(data);
+            Toast.makeText(activityContext,
+                    activityContext.getString(R.string.audio_recording_result, resultFilePath),
+                    Toast.LENGTH_SHORT)
+                    .show();
+        }
     }
 
     @Override

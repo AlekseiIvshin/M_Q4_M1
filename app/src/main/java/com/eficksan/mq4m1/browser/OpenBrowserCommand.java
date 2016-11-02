@@ -1,7 +1,6 @@
 package com.eficksan.mq4m1.browser;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
@@ -22,8 +21,7 @@ public class OpenBrowserCommand extends Command {
 
     @Override
     public void execute(Activity activityContext) {
-        Intent i = new Intent(Intent.ACTION_VIEW,
-                Uri.parse(mUrl));
+        Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(mUrl));
         activityContext.startActivity(i);
     }
 

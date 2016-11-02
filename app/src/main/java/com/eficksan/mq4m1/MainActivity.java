@@ -2,9 +2,12 @@ package com.eficksan.mq4m1;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -65,6 +68,31 @@ public class MainActivity extends AppCompatActivity {
         integrator.initiateScan();
     }
 
+    @OnClick(R.id.open_url)
+    public void openUrl() {
+        runCommand(CommandFactory.OPEN_BROWSER + "http://bash.im");
+    }
+
+    @OnClick(R.id.take_photo_custom_crop)
+    public void takePhotoCustomCrop() {
+        runCommand(CommandFactory.TAKE_PHOTO_AND_CUSTOM_CROP);
+    }
+
+    @OnClick(R.id.take_photo_lib_crop)
+    public void takePhoto3rdLibCrop() {
+        runCommand(CommandFactory.TAKE_PHOTO_AND_CUSTOM_CROP);
+    }
+
+    @OnClick(R.id.record_video)
+    public void recordVideo() {
+        runCommand(CommandFactory.TAKE_VIDEO);
+    }
+
+    @OnClick(R.id.record_audio)
+    public void recordAudio() {
+        runCommand(CommandFactory.RECORD_AUDIO);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (!handleCommandReceiveResult(requestCode, resultCode, data)) {
@@ -73,7 +101,14 @@ public class MainActivity extends AppCompatActivity {
                 resultHandler.handleResult(this, requestCode, resultCode, data);
             }
         }
+    }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        Command resultHandler = CommandFactory.createResultHandler(requestCode);
+        if (resultHandler != null) {
+            resultHandler.execute(this);
+        }
     }
 
     private boolean handleCommandReceiveResult(int requestCode, int resultCode, Intent data) {
@@ -89,8 +124,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void runCommand(String scanContent) {
-        Command command = CommandFactory.create(scanContent);
-        command.execute(this);
+        if (!TextUtils.isEmpty(scanContent)) {
+            Command command = CommandFactory.create(scanContent);
+            command.execute(this);
+        }
     }
 
     private void saveCommand(final String scanContent) {
