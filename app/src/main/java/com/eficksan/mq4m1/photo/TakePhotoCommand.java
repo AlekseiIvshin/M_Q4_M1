@@ -3,11 +3,9 @@ package com.eficksan.mq4m1.photo;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -28,14 +26,15 @@ import static com.eficksan.mq4m1.commands.CommandFactory.TAKE_PHOTO_AND_CUSTOM_C
 public class TakePhotoCommand extends Command {
     private static final String TAG = TakePhotoCommand.class.getSimpleName();
 
+    private static final String[] PERMISSIONS = {
+            Manifest.permission.CAMERA,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
+
     @Override
     public void execute(Activity activityContext) {
-        if (ContextCompat.checkSelfPermission(activityContext, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(activityContext, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            Log.v(TAG, "Permissions needed");
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                activityContext.requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, getDefaultCommandRequestCode());
-            }
+        if (!isPermissionsGranted(activityContext, PERMISSIONS) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            activityContext.requestPermissions(PERMISSIONS, getDefaultCommandRequestCode());
             return;
         }
         Intent takeVideoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);

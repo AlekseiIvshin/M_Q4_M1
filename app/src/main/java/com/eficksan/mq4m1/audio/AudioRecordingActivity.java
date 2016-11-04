@@ -3,7 +3,6 @@ package com.eficksan.mq4m1.audio;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.media.MediaRecorder;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,9 +12,9 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.eficksan.mq4m1.R;
+import com.eficksan.mq4m1.commands.Command;
 
 import java.io.IOException;
 
@@ -30,6 +29,11 @@ public class AudioRecordingActivity extends AppCompatActivity {
     private static final String EXTRA_RESULT_DATA
             = AudioRecordingActivity.class.getPackage() + ".EXTRA_RESULT_DATA";
     private static final int RECORD_AUDIO_PERMISSION = 202;
+
+    private static final String[] PERMISSIONS = {
+            Manifest.permission.CAMERA,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
 
     @BindView(R.id.record_audio)
     View mRecordAudio;
@@ -90,14 +94,12 @@ public class AudioRecordingActivity extends AppCompatActivity {
 
     private void startRecord() {
         Log.v(TAG, "startRecord");
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            Log.v(TAG, "Permissions needed");
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE}, RECORD_AUDIO_PERMISSION);
-            }
+
+        if (!Command.isPermissionsGranted(this, PERMISSIONS) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            this.requestPermissions(PERMISSIONS, RECORD_AUDIO_PERMISSION);
             return;
         }
+
         mIsRecordingNow = true;
         mRecordAudio.setBackground(ContextCompat.getDrawable(this, R.drawable.bg_recording));
 

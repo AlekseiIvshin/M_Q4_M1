@@ -2,6 +2,9 @@ package com.eficksan.mq4m1.commands;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.support.v4.content.ContextCompat;
 
 /**
  * Created by Aleksei Ivshin
@@ -24,5 +27,17 @@ public abstract class Command {
 
     protected boolean isCanHandleResult(int requestCode) {
         return requestCode == getDefaultCommandRequestCode();
+    }
+
+    public static boolean isPermissionsGranted(Activity activityContext, String[] requiredPermissions) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            return true;
+        }
+        for (String permission : requiredPermissions) {
+            if (ContextCompat.checkSelfPermission(activityContext, permission) != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+        }
+        return true;
     }
 }
