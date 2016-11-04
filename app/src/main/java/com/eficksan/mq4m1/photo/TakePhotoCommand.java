@@ -34,7 +34,7 @@ public class TakePhotoCommand extends Command {
                 || ContextCompat.checkSelfPermission(activityContext, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             Log.v(TAG, "Permissions needed");
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                activityContext.requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, TAKE_PHOTO_AND_CUSTOM_CROP_REQUEST_CODE);
+                activityContext.requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, getDefaultCommandRequestCode());
             }
             return;
         }

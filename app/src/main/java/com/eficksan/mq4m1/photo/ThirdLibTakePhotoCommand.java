@@ -17,7 +17,6 @@ import static com.eficksan.mq4m1.commands.CommandFactory.TAKE_PHOTO_AND_THIRD_LI
 
 public class ThirdLibTakePhotoCommand extends TakePhotoCommand {
 
-
     @Override
     protected boolean isCanHandleResult(int requestCode) {
         return TAKE_PHOTO_AND_THIRD_LIB_CROP_REQUEST_CODE == requestCode || UCrop.REQUEST_CROP == requestCode;
