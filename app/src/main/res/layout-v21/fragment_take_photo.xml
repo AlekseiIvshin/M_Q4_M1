@@ -18,7 +18,6 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="@dimen/activity_horizontal_margin"
-        android:background="@drawable/bg_start_recording"
-        android:visibility="gone"
-        tools:visibility="visible" />
+        android:layout_centerInParent="true"
+        android:background="@drawable/bg_start_recording" />
 </RelativeLayout>

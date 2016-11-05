@@ -19,19 +19,19 @@ public class CropUtils {
         int horizontalOffset = (sourceWidth - size) / 2;
         int verticalOffset = (sourceHeight - size) / 2;
 
-        return cropImageSquare(source, verticalOffset, horizontalOffset, size);
+        return cropImageSquare(source, horizontalOffset, verticalOffset, size);
     }
 
-    public static Bitmap cropImageSquare(Bitmap srcBitMap, int top, int left, int size) {
-        return cropImage(srcBitMap, top, left, size, size);
+    public static Bitmap cropImageSquare(Bitmap srcBitMap, int left, int top, int size) {
+        return cropImage(srcBitMap, left, top, size, size);
     }
 
-    public static Bitmap cropImage(String srcFile, int top, int left, int width, int height) {
+    public static Bitmap cropImage(String srcFile, int left, int top, int width, int height) {
         Bitmap srcBitMap = BitmapFactory.decodeFile(srcFile);
-        return cropImage(srcBitMap, top, left, width, height);
+        return cropImage(srcBitMap, left, top, width, height);
     }
 
-    public static Bitmap cropImage(Bitmap srcBitMap, int top, int left, int width, int height) {
-        return Bitmap.createBitmap(srcBitMap, top, left, width, height);
+    public static Bitmap cropImage(Bitmap srcBitMap, int left, int top, int width, int height) {
+        return Bitmap.createBitmap(srcBitMap, left, top, width, height);
     }
 }

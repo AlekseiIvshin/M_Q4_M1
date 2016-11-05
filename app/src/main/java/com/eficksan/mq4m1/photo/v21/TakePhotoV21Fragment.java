@@ -236,7 +236,7 @@ public class TakePhotoV21Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_video, container, false);
+        return inflater.inflate(R.layout.fragment_take_photo, container, false);
     }
 
     @Override
@@ -291,6 +291,9 @@ public class TakePhotoV21Fragment extends Fragment {
             StreamConfigurationMap map = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
             assert map != null;
             mPhotoSize = choosePhotoSize(map.getOutputSizes(SurfaceTexture.class));
+
+            mPreviewSize = chooseOptimalSize(map.getOutputSizes(SurfaceTexture.class),
+                    width, height, mPhotoSize);
             // Add permission for camera and let user grant the permission
             if (!hasPermissionsGranted()) {
                 requestPermissions();
@@ -353,8 +356,7 @@ public class TakePhotoV21Fragment extends Fragment {
             captureBuilder.addTarget(imageReader.getSurface());
             captureBuilder.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO);
             // Orientation
-
-
+            mSensorOrientation = characteristics.get(CameraCharacteristics.SENSOR_ORIENTATION);
             int rotation = getActivity().getWindowManager().getDefaultDisplay().getRotation();
             switch (mSensorOrientation) {
                 case SENSOR_ORIENTATION_DEFAULT_DEGREES:
@@ -375,7 +377,7 @@ public class TakePhotoV21Fragment extends Fragment {
 
                     takingPhotoResultListener.onSuccess(outputFile);
 
-                    startPreview();
+//                    startPreview();
                 }
             };
             cameraDevice.createCaptureSession(outputSurfaces, new CameraCaptureSession.StateCallback() {

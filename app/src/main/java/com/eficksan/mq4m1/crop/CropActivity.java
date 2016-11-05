@@ -11,9 +11,11 @@ import android.util.Log;
 
 import com.eficksan.mq4m1.R;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URI;
 
 public class CropActivity extends AppCompatActivity {
 
@@ -50,10 +52,12 @@ public class CropActivity extends AppCompatActivity {
         protected Boolean doInBackground(Uri... params) {
             Uri sourceFile = params[0];
             Uri destFile = params[1];
+            Log.v(TAG, String.format("Src: '%s', dest: '%s'", sourceFile, destFile));
             Bitmap bitmap = CropUtils.cromImageCenteredSquare(sourceFile.toString());
+            File file = new File(URI.create(destFile.toString()));
             FileOutputStream os = null;
             try {
-                os = new FileOutputStream(destFile.toString());
+                os = new FileOutputStream(file);
 
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os);
             } catch (FileNotFoundException e) {

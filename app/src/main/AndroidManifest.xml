@@ -23,10 +23,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".audio.AudioRecordingActivity" />
+        <activity android:name=".audio.AudioRecordingActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".video.VideoRecordingActivity"
-            android:screenOrientation="landscape">
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.media.action.VIDEO_CAPTURE" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -34,7 +36,8 @@
         </activity>
         <activity
             android:name=".photo.TakingPhotoActivity"
-            android:screenOrientation="landscape">
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.media.action.IMAGE_CAPTURE" />
                 <category android:name="android.intent.category.DEFAULT" />

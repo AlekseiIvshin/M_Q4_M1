@@ -34,11 +34,10 @@ public class VideoRecordingActivity extends AppCompatActivity implements VideoRe
 
     private Fragment getFragment() {
         String output = generateVideoPath();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Log.v(TAG, "Run fragment for sdk equal or greater than 21");
-            return VideoFragmentV21.newInstance(output);
-        } else {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             return VideoFragmentV16.newInstance(output);
+        } else {
+            return VideoFragmentV21.newInstance(output);
         }
     }
 

@@ -43,7 +43,7 @@ public class TakePhotoCommand extends Command {
 
         Intent chooser = Intent.createChooser(takeVideoIntent, activityContext.getString(R.string.choose_take_a_video));
         if (chooser.resolveActivity(activityContext.getPackageManager()) != null) {
-            activityContext.startActivity(chooser);
+            activityContext.startActivityForResult(chooser, getDefaultCommandRequestCode());
         }
     }
 
